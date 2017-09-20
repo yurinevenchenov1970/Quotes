@@ -1,4 +1,4 @@
-package com.github.yurinevenchenov1970.quotes;
+package com.github.yurinevenchenov1970.quotes.bean;
 
 import android.support.annotation.NonNull;
 
