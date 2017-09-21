@@ -5,8 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.yurinevenchenov1970.quotes.Quote;
 import com.github.yurinevenchenov1970.quotes.R;
+import com.github.yurinevenchenov1970.quotes.bean.Quote;
 
 import java.util.List;
 
