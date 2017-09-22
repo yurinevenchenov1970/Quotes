@@ -30,12 +30,7 @@ public class QuotesRealmFragment extends BasicFragment implements QuoteClickList
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnQuoteRealmClickListener) {
-            mListener = (OnQuoteRealmClickListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnQuoteRealmClickListener");
-        }
+        mListener = (OnQuoteRealmClickListener) getActivity();
     }
 
     @Override

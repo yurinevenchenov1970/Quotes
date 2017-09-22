@@ -2,7 +2,9 @@ package com.github.yurinevenchenov1970.quotes;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.view.View;
 import android.widget.Toast;
 
@@ -36,12 +38,7 @@ public class QuotesServerFragment extends BasicFragment implements QuoteClickLis
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnQuoteServerClickListener) {
-            mListener = (OnQuoteServerClickListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnQuoteServerClickListener");
-        }
+        mListener = (OnQuoteServerClickListener) getActivity();
     }
 
     @Override
@@ -78,10 +75,13 @@ public class QuotesServerFragment extends BasicFragment implements QuoteClickLis
     private void getDataFromServer() {
         String category = Utils.readIsFamousChecked(getActivity()) ? FAMOUS : MOVIES;
         int count = Utils.readQuotesCount(getActivity());
-        if (count == 1) {
-            getOneQuote(category);
-        } else {
-            getQuotes(category, count);
+        if(Utils.hasConnection(getContext())) {
+            if (count == 1) {
+                getOneQuote(category);
+            } else {
+                getQuotes(category, count);
+                handleFailure(R.string.no_connection);
+            }
         }
     }
 
@@ -89,7 +89,7 @@ public class QuotesServerFragment extends BasicFragment implements QuoteClickLis
         Call<Quote> call = mService.getQuote(category, 1);
         call.enqueue(new Callback<Quote>() {
             @Override
-            public void onResponse(Call<Quote> call, Response<Quote> response) {
+            public void onResponse(@NonNull Call<Quote> call, @NonNull Response<Quote> response) {
                 Quote quote = response.body();
                 if (quote != null) {
                     mQuoteList = Collections.singletonList(quote);
@@ -98,8 +98,8 @@ public class QuotesServerFragment extends BasicFragment implements QuoteClickLis
             }
 
             @Override
-            public void onFailure(Call<Quote> call, Throwable t) {
-                handleFailure();
+            public void onFailure(@NonNull Call<Quote> call, @NonNull Throwable t) {
+                handleFailure(R.string.error);
             }
         });
     }
@@ -108,7 +108,7 @@ public class QuotesServerFragment extends BasicFragment implements QuoteClickLis
         Call<List<Quote>> listCall = mService.getQuotesList(category, count);
         listCall.enqueue(new Callback<List<Quote>>() {
             @Override
-            public void onResponse(Call<List<Quote>> call, Response<List<Quote>> response) {
+            public void onResponse(@NonNull Call<List<Quote>> call, @NonNull Response<List<Quote>> response) {
                 List<Quote> quoteList = response.body();
                 if (quoteList != null && !quoteList.isEmpty()) {
                     mQuoteList = quoteList;
@@ -117,15 +117,15 @@ public class QuotesServerFragment extends BasicFragment implements QuoteClickLis
             }
 
             @Override
-            public void onFailure(Call<List<Quote>> call, Throwable t) {
-                handleFailure();
+            public void onFailure(@NonNull Call<List<Quote>> call, @NonNull Throwable t) {
+                handleFailure(R.string.error);
             }
         });
     }
 
-    private void handleFailure() {
+    private void handleFailure(@StringRes int messageId) {
         onStopRefreshing();
-        Toast.makeText(getContext(), R.string.error, Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), messageId, Toast.LENGTH_LONG).show();
     }
 
     private void showData() {
