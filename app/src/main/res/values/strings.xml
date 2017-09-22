@@ -13,4 +13,6 @@
     <string name="exit_app">Exit application</string>
     <string name="are_you_shure">Are You sure?</string>
     <string name="pull_to_refresh">Pull to refresh</string>
+    <string name="tap_to_update">Tap to update</string>
+    <string name="widget_label">Famous Quotes Widget</string>
 </resources>

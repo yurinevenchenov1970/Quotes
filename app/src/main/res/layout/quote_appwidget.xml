@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/root"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+    android:background="@color/grey"
+    android:padding="@dimen/padding_small">
+
+    <TextView
+        android:id="@+id/quote_text_view"
+        android:layout_toLeftOf="@+id/get_button"
+        android:fontFamily="sans-serif"
+        android:padding="@dimen/padding_xsmall"
+        android:text="@string/tap_to_update"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+        android:textColor="@color/white"
+        tools:text="quote text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/author_text_view"
+        android:layout_toLeftOf="@+id/get_button"
+        android:layout_below="@+id/quote_text_view"
+        android:fontFamily="sans-serif"
+        android:textStyle="italic"
+        android:gravity="right"
+        android:padding="@dimen/padding_xsmall"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+        android:textColor="@color/white"
+        tools:text="author"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <ImageButton
+        android:id="@+id/get_button"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/refresh_vector"/>
+
+</RelativeLayout>
