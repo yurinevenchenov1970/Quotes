@@ -26,8 +26,6 @@ import static com.github.yurinevenchenov1970.quotes.net.Categories.MOVIES;
 public class QuotesServerFragment extends BasicFragment implements QuoteClickListener {
 
     private OnQuoteServerClickListener mListener;
-    private List<Quote> mQuoteList;
-    private QuoteAdapter mAdapter;
     private QuoteService mService;
     private boolean mIsFirstTime;
 
@@ -71,9 +69,9 @@ public class QuotesServerFragment extends BasicFragment implements QuoteClickLis
     }
 
     @Override
-    public void onQuoteClick(int position) {
+    public void onQuoteClick(View view, int position) {
         if (mListener != null) {
-            mListener.onQuoteServerClick(mQuoteList.get(position));
+            mListener.onQuoteServerClick(view, mQuoteList.get(position));
         }
     }
 
@@ -149,6 +147,6 @@ public class QuotesServerFragment extends BasicFragment implements QuoteClickLis
     }
 
     public interface OnQuoteServerClickListener {
-        void onQuoteServerClick(Quote quote);
+        void onQuoteServerClick(View view, Quote quote);
     }
 }

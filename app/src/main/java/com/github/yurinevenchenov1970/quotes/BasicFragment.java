@@ -10,10 +10,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.yurinevenchenov1970.quotes.adapter.QuoteAdapter;
+import com.github.yurinevenchenov1970.quotes.bean.Quote;
+
+import java.util.List;
+
 public abstract class BasicFragment extends Fragment {
 
     protected SwipeRefreshLayout mSwipeRefreshLayout;
     protected RecyclerView mRecyclerView;
+    protected List<Quote> mQuoteList;
+    protected QuoteAdapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

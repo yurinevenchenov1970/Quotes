@@ -10,14 +10,18 @@ import com.github.yurinevenchenov1970.quotes.adapter.QuoteClickListener;
 import com.github.yurinevenchenov1970.quotes.bean.Quote;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.Realm;
 
 /**
  * @author Yuri Nevenchenov on 9/20/2017.
  */
 
-public class QuotesRealmFragment extends BasicFragment {
+public class QuotesRealmFragment extends BasicFragment implements QuoteClickListener {
 
     private OnQuoteRealmClickListener mListener;
+    private Realm mRealm;
 
     public static QuotesRealmFragment newInstance() {
         return new QuotesRealmFragment();
@@ -35,14 +39,16 @@ public class QuotesRealmFragment extends BasicFragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mRealm = Realm.getInstance(getContext());
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mRecyclerView.setAdapter(new QuoteAdapter(new ArrayList<Quote>(), new QuoteClickListener() {
-            @Override
-            public void onQuoteClick(int position) {
-
-            }
-        }));
+        fillAdapter();
+        onStopRefreshing();
     }
 
     @Override
@@ -53,15 +59,34 @@ public class QuotesRealmFragment extends BasicFragment {
 
     @Override
     protected void onSwipeRefresh() {
-        // TODO: 9/20/2017 set adapter from realm
+        fillAdapter();
         onStopRefreshing();
+    }
+
+    @Override
+    public void onQuoteClick(View view, int position) {
+        if (mListener != null) {
+            mListener.onQuoteRealmClick(view, mQuoteList.get(position));
+        }
     }
 
     private void onStopRefreshing() {
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
+    private void fillAdapter() {
+        mQuoteList = getQuoteList();
+        mAdapter = new QuoteAdapter(mQuoteList, this);
+        mRecyclerView.setAdapter((mAdapter));
+    }
+
+    private List<Quote> getQuoteList() {
+        List<Quote> list = new ArrayList<>();
+        list.addAll(mRealm.allObjects(Quote.class));
+        return list;
+    }
+
     public interface OnQuoteRealmClickListener {
-        void onQuoteRealmClick(String quote);
+        void onQuoteRealmClick(View view, Quote quote);
     }
 }
