@@ -11,10 +11,13 @@ import android.widget.RemoteViews;
 
 import com.github.yurinevenchenov1970.quotes.R;
 import com.github.yurinevenchenov1970.quotes.bean.Quote;
+import com.github.yurinevenchenov1970.quotes.dagger.QuoteApplication;
 import com.github.yurinevenchenov1970.quotes.net.ApiClient;
 import com.github.yurinevenchenov1970.quotes.net.Categories;
 import com.github.yurinevenchenov1970.quotes.net.QuoteService;
-import com.github.yurinevenchenov1970.quotes.utils.Utils;
+import com.github.yurinevenchenov1970.quotes.utils.SharedPrefManager;
+
+import javax.inject.Inject;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -27,8 +30,21 @@ import retrofit2.Response;
  */
 
 public class QuoteWidgetProvider extends AppWidgetProvider {
+
+    @Inject
+    QuoteService mService;
+
+    @Inject
+    SharedPrefManager mPrefManager;
+
+    @Inject
+    Realm mRealm;
+
     @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+    public void onUpdate(final Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        ((QuoteApplication) context.getApplicationContext())
+                .getNetComponent()
+                .inject(this);
         Intent intent = new Intent(context, QuoteWidgetProvider.class);
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
@@ -41,11 +57,10 @@ public class QuoteWidgetProvider extends AppWidgetProvider {
         final ComponentName componentName = new ComponentName(context, QuoteWidgetProvider.class);
         manager.updateAppWidget(componentName, views);
 
-        Realm realm = Realm.getInstance(context);
-        RealmResults<Quote> quotes = realm.allObjects(Quote.class);
-        if (Utils.hasConnection(context)) {
+        RealmResults<Quote> quotes = mRealm.allObjects(Quote.class);
+        if (mPrefManager.hasConnection(context)) {
             QuoteService service = ApiClient.getClient().create(QuoteService.class);
-            Call<Quote> call = service.getQuote(Categories.FAMOUS, 1);
+            Call<Quote> call = mService.getQuote(Categories.FAMOUS, 1);
             call.enqueue(new Callback<Quote>() {
                 @Override
                 public void onResponse(Call<Quote> call, Response<Quote> response) {
@@ -63,7 +78,7 @@ public class QuoteWidgetProvider extends AppWidgetProvider {
                 }
             });
         } else if (quotes != null && !quotes.isEmpty()) {
-            int randomIndex = Utils.generateRandomNumber(0, quotes.size());
+            int randomIndex = mPrefManager.generateRandomNumber(0, quotes.size());
             Quote quote = quotes.get(randomIndex);
             views.setTextViewText(R.id.quote_text_view, quote.getQuote());
             views.setTextViewText(R.id.author_text_view, quote.getAuthor());

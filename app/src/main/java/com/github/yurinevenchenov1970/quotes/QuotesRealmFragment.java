@@ -8,9 +8,11 @@ import android.view.View;
 import com.github.yurinevenchenov1970.quotes.adapter.QuoteAdapter;
 import com.github.yurinevenchenov1970.quotes.adapter.QuoteClickListener;
 import com.github.yurinevenchenov1970.quotes.bean.Quote;
+import com.github.yurinevenchenov1970.quotes.dagger.QuoteApplication;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import io.realm.Realm;
 
@@ -20,8 +22,10 @@ import io.realm.Realm;
 
 public class QuotesRealmFragment extends BasicFragment implements QuoteClickListener {
 
+    @Inject
+    Realm mRealm;
+
     private OnQuoteRealmClickListener mListener;
-    private Realm mRealm;
 
     public static QuotesRealmFragment newInstance() {
         return new QuotesRealmFragment();
@@ -36,7 +40,9 @@ public class QuotesRealmFragment extends BasicFragment implements QuoteClickList
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRealm = Realm.getInstance(getContext());
+        ((QuoteApplication) getActivity().getApplication())
+                .getNetComponent()
+                .inject(this);
     }
 
     @Override
@@ -76,9 +82,7 @@ public class QuotesRealmFragment extends BasicFragment implements QuoteClickList
     }
 
     private List<Quote> getQuoteList() {
-        List<Quote> list = new ArrayList<>();
-        list.addAll(mRealm.allObjects(Quote.class));
-        return list;
+        return mRealm.allObjects(Quote.class);
     }
 
     public interface OnQuoteRealmClickListener {
