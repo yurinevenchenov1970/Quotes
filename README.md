@@ -11,6 +11,9 @@ Do You wish to read quotes within main screen of Your device? Use android widget
 
 
 Libs used in project:
+
 1.Retrofit (http://square.github.io/retrofit/) used to turn our HTTP API into a Java interface.
+
 2.Jackson (https://github.com/FasterXML/jackson) used to integrate JSON with Java.
+
 3.Dagger (https://google.github.io/dagger/) used to fast dependency injection for managing objects.
