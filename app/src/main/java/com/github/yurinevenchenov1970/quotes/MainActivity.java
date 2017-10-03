@@ -100,7 +100,6 @@ public class MainActivity extends AppCompatActivity implements
                     @Override
                     public void onClick(View v) {
                         removeQuoteFromFavorites(quote);
-                        showMessagePullToRefresh();
                     }
                 })
                 .show();
@@ -122,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements
     private void initViewPager() {
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         mViewPager.setAdapter(mPagerAdapter);
+        showMessagePullToRefresh();
     }
 
     private void initTabLayout() {
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         saveSettings(countEditText.getText().toString(), famousButton.isChecked());
-                        showMessagePullToRefresh();
+                        refreshQServerFragment();
                     }
                 })
                 .setView(view)
@@ -173,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements
                         .equalTo("quote", quote.getQuote())
                         .findFirst();
                 quoteToRemove.removeFromRealm();
+                refreshQRealmFragment();
             }
         });
     }
@@ -180,6 +181,16 @@ public class MainActivity extends AppCompatActivity implements
     private void showMessagePullToRefresh() {
         Toast.makeText(getApplicationContext(), R.string.pull_to_refresh, Toast.LENGTH_LONG)
                 .show();
+    }
+
+    private void refreshQServerFragment() {
+        QuotesServerFragment fragment = (QuotesServerFragment) getSupportFragmentManager().getFragments().get(0);
+        fragment.getDataFromServer();
+    }
+
+    private void refreshQRealmFragment() {
+        QuotesRealmFragment fragment = (QuotesRealmFragment) getSupportFragmentManager().getFragments().get(1);
+        fragment.fillAdapter();
     }
 
     //endregion

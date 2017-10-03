@@ -83,7 +83,7 @@ public class QuotesServerFragment extends BasicFragment implements QuoteClickLis
         }
     }
 
-    private void getDataFromServer() {
+    protected void getDataFromServer() {
         String category = mPrefManager.readIsFamousChecked() ? FAMOUS : MOVIES;
         int count = mPrefManager.readQuotesCount();
         if (mPrefManager.hasConnection(getContext())) {
@@ -148,7 +148,7 @@ public class QuotesServerFragment extends BasicFragment implements QuoteClickLis
         }
     }
 
-    private void fillAdapter() {
+    protected void fillAdapter() {
         mAdapter = new QuoteAdapter(mQuoteList, this);
         mRecyclerView.setAdapter(mAdapter);
     }
