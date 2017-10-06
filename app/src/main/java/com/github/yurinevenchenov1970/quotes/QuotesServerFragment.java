@@ -91,8 +91,9 @@ public class QuotesServerFragment extends BasicFragment implements QuoteClickLis
                 getOneQuote(category);
             } else {
                 getQuotes(category, count);
-                handleFailure(R.string.no_connection);
             }
+        } else {
+            handleFailure(R.string.no_connection);
         }
     }
 
