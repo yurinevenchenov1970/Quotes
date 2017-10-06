@@ -7,7 +7,7 @@ Do You wish to read quotes within main screen of Your device? Use android widget
 
 
 
-![quotes 3](https://user-images.githubusercontent.com/29121233/31219190-36fdc5c6-a9c5-11e7-9ec2-ad17a81977f3.gif)
+![quotes](https://user-images.githubusercontent.com/29121233/31274658-87edf3de-aa9c-11e7-9a50-4e19bd0a9317.gif)
 
 
 
